@@ -1,0 +1,28 @@
+### 1. GET all (Отримати всі)
+GET http://localhost:8080/api/v1/items
+
+### 2. GET one (Отримати один)
+GET http://localhost:8080/api/v1/items/1
+
+### 3. POST (Створити новий)
+POST http://localhost:8080/api/v1/items
+Content-Type: application/json
+
+{
+  "id": "4",
+  "name": "Ноутбук Lenovo Legion",
+  "description": "Ігровий ноутбук, 16GB RAM, 512GB SSD"
+}
+
+### 4. PUT (Оновити існуючий)
+PUT http://localhost:8080/api/v1/items
+Content-Type: application/json
+
+{
+  "id": "1",
+  "name": "Apple iPhone 15 - Знижка",
+  "description": "Оновлена ціна для розпродажу"
+}
+
+### 5. DELETE (Видалити)
+DELETE http://localhost:8080/api/v1/items/4
