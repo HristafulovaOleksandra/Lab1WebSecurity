@@ -1,0 +1,69 @@
+### 1. GET all — happy path (правильні креди)
+GET http://localhost:8080/api/v1/items
+Authorization: Basic admin admin
+Accept: application/json
+
+### 2. GET all — bad credentials (неправильний пароль)
+GET http://localhost:8080/api/v1/items
+Authorization: Basic admin admin1
+Accept: application/json
+
+### 3. GET one — happy path
+GET http://localhost:8080/api/v1/items/2
+Authorization: Basic admin admin
+Accept: application/json
+
+### 4. GET one — bad credentials
+GET http://localhost:8080/api/v1/items/2
+Authorization: Basic admin admin1
+Accept: application/json
+
+### 5. POST (create) — happy path
+POST http://localhost:8080/api/v1/items
+Authorization: Basic admin admin
+Content-Type: application/json
+
+{
+  "name": "Ноутбук Lenovo Legion",
+  "description": "Ігровий ноутбук, 16GB RAM, 512GB SSD"
+}
+
+### 6. POST (create) — bad credentials
+POST http://localhost:8080/api/v1/items
+Authorization: Basic admin admin1
+Content-Type: application/json
+
+{
+  "name": "Ноутбук Lenovo Legion",
+  "description": "Ігровий ноутбук, 16GB RAM, 512GB SSD"
+}
+
+### 7. PUT (update) — happy path
+PUT http://localhost:8080/api/v1/items
+Authorization: Basic admin admin
+Content-Type: application/json
+
+{
+  "id": "1",
+  "name": "Apple iPhone 15 - Знижка",
+  "description": "Оновлена ціна для розпродажу"
+}
+
+### 8. PUT (update) — bad credentials
+PUT http://localhost:8080/api/v1/items
+Authorization: Basic admin admin1
+Content-Type: application/json
+
+{
+  "id": "1",
+  "name": "Apple iPhone 15 - Знижка",
+  "description": "Оновлена ціна для розпродажу"
+}
+
+### 9. DELETE — happy path
+DELETE http://localhost:8080/api/v1/items/3
+Authorization: Basic admin admin
+
+### 10. DELETE — bad credentials
+DELETE http://localhost:8080/api/v1/items/3
+Authorization: Basic admin admin1
