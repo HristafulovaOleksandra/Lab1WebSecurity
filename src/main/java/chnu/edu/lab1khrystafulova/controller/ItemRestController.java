@@ -3,6 +3,7 @@ package chnu.edu.lab1khrystafulova.controller;
 import chnu.edu.lab1khrystafulova.model.Item;
 import chnu.edu.lab1khrystafulova.service.ItemService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,23 +35,31 @@ public class ItemRestController {
         return itemService.updateItem(item);
     }
 
+    // видаляти може тільки SUPERADMIN
+    @PreAuthorize("hasRole('SUPERADMIN')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable String id) {
         itemService.deleteItem(id);
     }
-    //------------------- MULTI-USER -------------------
+
+    //------------------- ANNOTATIONS -------------------
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/hello/admin")
     public String helloAdmin() { return "Hello, Admin!"; }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/hello/user")
     public String helloUser() { return "Hello, User!"; }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @GetMapping("/hello/man")
     public String helloMan() { return "Hello, man!"; }
 
+    @PreAuthorize("hasRole('SUPERADMIN')")
     @GetMapping("/hello/superadmin")
     public String helloSuperAdmin() { return "Hello, SuperAdmin!"; }
 
+    // без анотації: доступ має будь-хто, хто ввійшов
     @GetMapping("/hello/unknown")
     public String helloUnknown() { return "Hello, Unknown!"; }
 }

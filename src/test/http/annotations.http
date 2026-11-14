@@ -1,0 +1,72 @@
+### 1. ADMIN -> /hello/admin (200)
+GET http://localhost:8080/api/v1/items/hello/admin
+Authorization: Basic admin admin
+
+> {% client.test("admin -> /hello/admin = 200", function () { client.assert(response.status === 200, "got " + response.status); }); %}
+
+### 2. USER -> /hello/admin (403)
+GET http://localhost:8080/api/v1/items/hello/admin
+Authorization: Basic user user
+
+> {% client.test("user -> /hello/admin = 403", function () { client.assert(response.status === 403, "got " + response.status); }); %}
+
+### 3. USER -> /hello/user (200)
+GET http://localhost:8080/api/v1/items/hello/user
+Authorization: Basic user user
+
+> {% client.test("user -> /hello/user = 200", function () { client.assert(response.status === 200, "got " + response.status); }); %}
+
+### 4. ADMIN -> /hello/user (403)
+GET http://localhost:8080/api/v1/items/hello/user
+Authorization: Basic admin admin
+
+> {% client.test("admin -> /hello/user = 403", function () { client.assert(response.status === 403, "got " + response.status); }); %}
+
+### 5. ADMIN -> /hello/man (200)
+GET http://localhost:8080/api/v1/items/hello/man
+Authorization: Basic admin admin
+
+> {% client.test("admin -> /hello/man = 200", function () { client.assert(response.status === 200, "got " + response.status); }); %}
+
+### 6. SUPERADMIN -> /hello/man (200)
+GET http://localhost:8080/api/v1/items/hello/man
+Authorization: Basic superadmin superadmin
+
+> {% client.test("superadmin -> /hello/man = 200", function () { client.assert(response.status === 200, "got " + response.status); }); %}
+
+### 7. USER -> /hello/man (403)
+GET http://localhost:8080/api/v1/items/hello/man
+Authorization: Basic user user
+
+> {% client.test("user -> /hello/man = 403", function () { client.assert(response.status === 403, "got " + response.status); }); %}
+
+### 8. USER -> /hello/unknown (200, анотації немає)
+GET http://localhost:8080/api/v1/items/hello/unknown
+Authorization: Basic user user
+
+> {% client.test("user -> /hello/unknown = 200", function () { client.assert(response.status === 200, "got " + response.status); }); %}
+
+### 9. ADMIN -> DELETE /items/3 (403, видаляє тільки superadmin)
+DELETE http://localhost:8080/api/v1/items/3
+Authorization: Basic admin admin
+
+> {% client.test("admin -> DELETE = 403", function () { client.assert(response.status === 403, "got " + response.status); }); %}
+
+### 10. SUPERADMIN -> DELETE /items/3 (200)
+DELETE http://localhost:8080/api/v1/items/3
+Authorization: Basic superadmin superadmin
+
+> {% client.test("superadmin -> DELETE = 200", function () { client.assert(response.status === 200, "got " + response.status); }); %}
+
+### 11. Без логіна -> /hello/unknown (401)
+# @no-cookie-jar
+GET http://localhost:8080/api/v1/items/hello/unknown
+
+> {% client.test("no credentials = 401", function () { client.assert(response.status === 401, "got " + response.status); }); %}
+
+### 12. Неправильний пароль (BCrypt) -> /hello/admin (401)
+# @no-cookie-jar
+GET http://localhost:8080/api/v1/items/hello/admin
+Authorization: Basic admin wrongpass
+
+> {% client.test("wrong password = 401", function () { client.assert(response.status === 401, "got " + response.status); }); %}
