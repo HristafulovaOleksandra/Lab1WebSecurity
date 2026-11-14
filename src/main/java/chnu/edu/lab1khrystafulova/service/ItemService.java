@@ -1,60 +1,58 @@
 package chnu.edu.lab1khrystafulova.service;
 
 import chnu.edu.lab1khrystafulova.model.Item;
+import chnu.edu.lab1khrystafulova.repository.ItemRepository;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/*
- * @author Khrystafulova
- * @project Lab1Khrystafulova
- * @class ItemService
- * @version 1.0.0
- * @since 28/09/2026
- */
 @Service
+@RequiredArgsConstructor
 public class ItemService {
 
-    private List<Item> items = new ArrayList<>();
+    private final ItemRepository itemRepository;
 
-    @PostConstruct
-    void init() {
+    private final List<Item> items = new ArrayList<>();
+
+    {
         items.add(new Item("1", "name1", "description1"));
         items.add(new Item("2", "name2", "description2"));
         items.add(new Item("3", "name3", "description3"));
     }
 
-    public List<Item> getAllItems() {
-        return items;
+    // при старті очищаємо колекцію і записуємо 3 початкові елементи в MongoDB
+    @PostConstruct
+    void init() {
+        itemRepository.deleteAll();
+        items.forEach(this::createItem);
     }
 
-    public Item createItem(Item item) {
-        items.add(item);
-        return item;
+    public List<Item> getAllItems() {
+        return itemRepository.findAll();
     }
 
     public Item getItem(String id) {
-        return items.stream()
-                .filter(item -> item.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        return itemRepository.findById(id).orElse(null);
+    }
+
+    public Item createItem(Item item) {
+        return itemRepository.save(item);
     }
 
     public Item updateItem(Item item) {
-        Item oldItem = getItem(item.getId());
-        if (oldItem != null) {
-            items.remove(oldItem);
-            items.add(item);
+        Item existing = itemRepository.findById(item.getId()).orElse(null);
+        if (existing != null) {
+            existing.setName(item.getName());
+            existing.setDescription(item.getDescription());
+            return itemRepository.save(existing);
         }
-        return item;
+        return null;
     }
 
     public void deleteItem(String id) {
-        Item item = getItem(id);
-        if (item != null) {
-            items.remove(item);
-        }
+        itemRepository.deleteById(id);
     }
 }

@@ -1,22 +1,17 @@
 package chnu.edu.lab1khrystafulova.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-/*
- * @author Khrystafulova
- * @project Lab1Khrystafulova
- * @class Item
- * @version 1.0.0
- * @since 28/09/2026
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class Item {
+@EqualsAndHashCode(callSuper = false)
+@Document
+public class Item extends Auditable {
+
+    @Id
     private String id;
     private String name;
     private String description;

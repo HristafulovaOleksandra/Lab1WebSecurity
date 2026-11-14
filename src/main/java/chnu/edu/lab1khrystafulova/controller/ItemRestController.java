@@ -7,13 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/*
- * @author Khrystafulova
- * @project Lab1Khrystafulova
- * @class ItemRestController
- * @version 1.0.0
- * @since 28/09/2026
- */
 @RestController
 @RequestMapping("/api/v1/items")
 @RequiredArgsConstructor

@@ -1,0 +1,34 @@
+### 1. GET all — показати всі
+GET http://localhost:8080/api/v1/items
+Authorization: Basic admin admin
+Accept: application/json
+
+### 2. GET one — отримати один
+GET http://localhost:8080/api/v1/items/2
+Authorization: Basic admin admin
+Accept: application/json
+
+### 3. POST — створити новий
+POST http://localhost:8080/api/v1/items
+Authorization: Basic admin admin
+Content-Type: application/json
+
+{
+  "name": "Ноутбук Lenovo Legion",
+  "description": "Ігровий ноутбук, 16GB RAM, 512GB SSD"
+}
+
+### 4. PUT — оновити існуючий
+PUT http://localhost:8080/api/v1/items
+Authorization: Basic admin admin
+Content-Type: application/json
+
+{
+  "id": "1",
+  "name": "Apple iPhone 15 - Знижка",
+  "description": "Оновлена ціна для розпродажу"
+}
+
+### 5. DELETE — видалити
+DELETE http://localhost:8080/api/v1/items/3
+Authorization: Basic admin admin
