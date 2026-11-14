@@ -1,0 +1,99 @@
+### 1. ADMIN -> /hello/admin (очікуємо 200)
+GET http://localhost:8080/api/v1/items/hello/admin
+Authorization: Basic admin admin
+
+> {%
+    client.test("admin -> /hello/admin = 200", function () {
+        client.assert(response.status === 200, "Expected 200, got " + response.status);
+    });
+%}
+
+### 2. USER -> /hello/admin (очікуємо 403, бо не адмін)
+GET http://localhost:8080/api/v1/items/hello/admin
+Authorization: Basic user user
+
+> {%
+    client.test("user -> /hello/admin = 403", function () {
+        client.assert(response.status === 403, "Expected 403, got " + response.status);
+    });
+%}
+
+### 3. USER -> /hello/user (очікуємо 200)
+GET http://localhost:8080/api/v1/items/hello/user
+Authorization: Basic user user
+
+> {%
+    client.test("user -> /hello/user = 200", function () {
+        client.assert(response.status === 200, "Expected 200, got " + response.status);
+    });
+%}
+
+### 4. ADMIN -> /hello/user (очікуємо 403, бо не юзер)
+GET http://localhost:8080/api/v1/items/hello/user
+Authorization: Basic admin admin
+
+> {%
+    client.test("admin -> /hello/user = 403", function () {
+        client.assert(response.status === 403, "Expected 403, got " + response.status);
+    });
+%}
+
+### 5. ADMIN -> /hello/man (очікуємо 200)
+GET http://localhost:8080/api/v1/items/hello/man
+Authorization: Basic admin admin
+
+> {%
+    client.test("admin -> /hello/man = 200", function () {
+        client.assert(response.status === 200, "Expected 200, got " + response.status);
+    });
+%}
+
+### 6. USER -> /hello/man (очікуємо 200)
+GET http://localhost:8080/api/v1/items/hello/man
+Authorization: Basic user user
+
+> {%
+    client.test("user -> /hello/man = 200", function () {
+        client.assert(response.status === 200, "Expected 200, got " + response.status);
+    });
+%}
+
+### 7. SUPERADMIN -> /hello/man (очікуємо 403, бо тільки USER або ADMIN)
+GET http://localhost:8080/api/v1/items/hello/man
+Authorization: Basic superadmin superadmin
+
+> {%
+    client.test("superadmin -> /hello/man = 403", function () {
+        client.assert(response.status === 403, "Expected 403, got " + response.status);
+    });
+%}
+
+### 8. SUPERADMIN -> /hello/superadmin (очікуємо 200)
+GET http://localhost:8080/api/v1/items/hello/superadmin
+Authorization: Basic superadmin superadmin
+
+> {%
+    client.test("superadmin -> /hello/superadmin = 200", function () {
+        client.assert(response.status === 200, "Expected 200, got " + response.status);
+    });
+%}
+
+### 9. ADMIN -> /hello/superadmin (очікуємо 403)
+GET http://localhost:8080/api/v1/items/hello/superadmin
+Authorization: Basic admin admin
+
+> {%
+    client.test("admin -> /hello/superadmin = 403", function () {
+        client.assert(response.status === 403, "Expected 403, got " + response.status);
+    });
+%}
+
+### 10. Без логіна -> /hello/unknown (очікуємо 401)
+# @no-cookie-jar
+GET http://localhost:8080/api/v1/items/hello/unknown
+
+> {%
+    client.test("no credentials -> /hello/unknown = 401", function () {
+        client.assert(response.status === 401, "Expected 401, got " + response.status);
+    });
+%}

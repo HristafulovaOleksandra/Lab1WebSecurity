@@ -38,4 +38,19 @@ public class ItemRestController {
     public void delete(@PathVariable String id) {
         itemService.deleteItem(id);
     }
+    //------------------- MULTI-USER -------------------
+    @GetMapping("/hello/admin")
+    public String helloAdmin() { return "Hello, Admin!"; }
+
+    @GetMapping("/hello/user")
+    public String helloUser() { return "Hello, User!"; }
+
+    @GetMapping("/hello/man")
+    public String helloMan() { return "Hello, man!"; }
+
+    @GetMapping("/hello/superadmin")
+    public String helloSuperAdmin() { return "Hello, SuperAdmin!"; }
+
+    @GetMapping("/hello/unknown")
+    public String helloUnknown() { return "Hello, Unknown!"; }
 }
