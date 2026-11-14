@@ -36,30 +36,30 @@ public class ItemRestController {
     }
 
     // видаляти може тільки SUPERADMIN
-    @PreAuthorize("hasRole('SUPERADMIN')")
+    @PreAuthorize("hasAuthority('SUPERADMIN')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable String id) {
         itemService.deleteItem(id);
     }
 
-    //------------------- ANNOTATIONS -------------------
-    @PreAuthorize("hasRole('ADMIN')")
+    //------------------- JWT: hasAuthority замість hasRole -------------------
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/hello/admin")
     public String helloAdmin() { return "Hello, Admin!"; }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/hello/user")
     public String helloUser() { return "Hello, User!"; }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
     @GetMapping("/hello/man")
     public String helloMan() { return "Hello, man!"; }
 
-    @PreAuthorize("hasRole('SUPERADMIN')")
+    @PreAuthorize("hasAuthority('SUPERADMIN')")
     @GetMapping("/hello/superadmin")
     public String helloSuperAdmin() { return "Hello, SuperAdmin!"; }
 
-    // без анотації: доступ має будь-хто, хто ввійшов
+    // без анотації: доступ має будь-хто з валідним токеном
     @GetMapping("/hello/unknown")
     public String helloUnknown() { return "Hello, Unknown!"; }
 }

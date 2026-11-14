@@ -1,0 +1,82 @@
+### 0a. Логін ADMIN (Oleksandra) -> токен запам'ятовується
+POST http://localhost:8080/auth/authenticate
+Content-Type: application/json
+
+{ "email": "oleksandra@mail.com", "password": "admin" }
+
+> {% client.global.set("admin_token", response.body.token); %}
+
+### 0b. Логін USER (Tom) -> токен запам'ятовується
+POST http://localhost:8080/auth/authenticate
+Content-Type: application/json
+
+{ "email": "tom@mail.com", "password": "user" }
+
+> {% client.global.set("user_token", response.body.token); %}
+
+### 0c. Логін SUPERADMIN (Peter) -> токен запам'ятовується
+POST http://localhost:8080/auth/authenticate
+Content-Type: application/json
+
+{ "email": "peter@mail.com", "password": "superadmin" }
+
+> {% client.global.set("super_token", response.body.token); %}
+
+### 1. ADMIN -> /hello/admin (200)
+GET http://localhost:8080/api/v1/items/hello/admin
+Authorization: Bearer {{admin_token}}
+
+> {% client.test("ADMIN -> /hello/admin = 200", function () { client.assert(response.status === 200, "got " + response.status); }); %}
+
+### 2. USER -> /hello/admin (403)
+GET http://localhost:8080/api/v1/items/hello/admin
+Authorization: Bearer {{user_token}}
+
+> {% client.test("USER -> /hello/admin = 403", function () { client.assert(response.status === 403, "got " + response.status); }); %}
+
+### 3. USER -> /hello/user (200)
+GET http://localhost:8080/api/v1/items/hello/user
+Authorization: Bearer {{user_token}}
+
+> {% client.test("USER -> /hello/user = 200", function () { client.assert(response.status === 200, "got " + response.status); }); %}
+
+### 4. ADMIN -> /hello/user (403)
+GET http://localhost:8080/api/v1/items/hello/user
+Authorization: Bearer {{admin_token}}
+
+> {% client.test("ADMIN -> /hello/user = 403", function () { client.assert(response.status === 403, "got " + response.status); }); %}
+
+### 5. SUPERADMIN -> /hello/man (200)
+GET http://localhost:8080/api/v1/items/hello/man
+Authorization: Bearer {{super_token}}
+
+> {% client.test("SUPERADMIN -> /hello/man = 200", function () { client.assert(response.status === 200, "got " + response.status); }); %}
+
+### 6. USER -> /hello/man (403)
+GET http://localhost:8080/api/v1/items/hello/man
+Authorization: Bearer {{user_token}}
+
+> {% client.test("USER -> /hello/man = 403", function () { client.assert(response.status === 403, "got " + response.status); }); %}
+
+### 7. SUPERADMIN -> /hello/superadmin (200)
+GET http://localhost:8080/api/v1/items/hello/superadmin
+Authorization: Bearer {{super_token}}
+
+> {% client.test("SUPERADMIN -> /hello/superadmin = 200", function () { client.assert(response.status === 200, "got " + response.status); }); %}
+
+### 8. ADMIN -> DELETE /items/3 (403, видаляє тільки SUPERADMIN)
+DELETE http://localhost:8080/api/v1/items/3
+Authorization: Bearer {{admin_token}}
+
+> {% client.test("ADMIN -> DELETE = 403", function () { client.assert(response.status === 403, "got " + response.status); }); %}
+
+### 9. SUPERADMIN -> DELETE /items/3 (200)
+DELETE http://localhost:8080/api/v1/items/3
+Authorization: Bearer {{super_token}}
+
+> {% client.test("SUPERADMIN -> DELETE = 200", function () { client.assert(response.status === 200, "got " + response.status); }); %}
+
+### 10. Без токена -> /hello/admin (403)
+GET http://localhost:8080/api/v1/items/hello/admin
+
+> {% client.test("No token -> 403", function () { client.assert(response.status === 403, "got " + response.status); }); %}
