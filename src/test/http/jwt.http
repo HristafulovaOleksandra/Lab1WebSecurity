@@ -1,0 +1,26 @@
+### 1. Отримати JWT для ADMIN (Oleksandra)
+POST http://localhost:8080/auth/authenticate
+Content-Type: application/json
+
+{
+  "email": "oleksandra@mail.com",
+  "password": "admin"
+}
+
+### 2. Отримати JWT для USER (Tom)
+POST http://localhost:8080/auth/authenticate
+Content-Type: application/json
+
+{
+  "email": "tom@mail.com",
+  "password": "user"
+}
+
+### 3. Отримати JWT для SUPERADMIN (Peter)
+POST http://localhost:8080/auth/authenticate
+Content-Type: application/json
+
+{
+  "email": "peter@mail.com",
+  "password": "superadmin"
+}
